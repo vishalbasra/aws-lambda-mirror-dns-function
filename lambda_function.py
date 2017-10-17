@@ -29,6 +29,8 @@ import os
 import sys
 import boto3
 
+# importing time to by-pass the throttling problem 
+import time
 # If you need to use a proxy server to access the Internet then hard code it 
 # the details below, otherwise comment out or remove.
 #os.environ["http_proxy"] = "10.10.10.10:3128"  # My on-premises proxy server
@@ -74,6 +76,7 @@ def update_resource_record(zone_id, host_name, hosted_zone_name, rectype, change
 
         try:  # Submit API request to Route 53
             route53.change_resource_record_sets(HostedZoneId=zone_id, ChangeBatch=dns_changes)
+            time.sleep(1)
         except BaseException as e:
             print e
             sys.exit('ERROR: Unable to update zone %s' % hosted_zone_name)
